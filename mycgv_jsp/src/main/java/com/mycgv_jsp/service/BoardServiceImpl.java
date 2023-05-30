@@ -2,11 +2,15 @@ package com.mycgv_jsp.service;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.mycgv_jsp.dao.BoardDao;
 import com.mycgv_jsp.vo.BoardVo;
 
 public class BoardServiceImpl implements BoardService{
-	private BoardDao boardDao = new BoardDao();
+	//private BoardDao boardDao = new BoardDao();
+	@Autowired
+	private BoardDao boardDao;
 	
 	@Override
 	public int getTotalRowCount() {

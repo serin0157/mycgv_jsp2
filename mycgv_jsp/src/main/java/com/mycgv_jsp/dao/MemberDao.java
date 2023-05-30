@@ -1,6 +1,9 @@
 package com.mycgv_jsp.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,46 +11,53 @@ import org.springframework.stereotype.Repository;
 
 import com.mycgv_jsp.vo.MemberVo;
 
-@Repository
+@Repository //Dao에서 수행하지 않음 
 public class MemberDao extends DBConn{
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
 	
-	
 	/**
 	 * startCount, endCount - 페이징 처리
 	 * */
 	public ArrayList<MemberVo> select(int startCount , int endCount){
-		ArrayList<MemberVo> list = new ArrayList<MemberVo>();
-		String sql = "SELECT RNO, ID, NAME, MDATE, GRADE" +
-					 "	FROM(SELECT ROWNUM RNO, ID, NAME, to_char(MDATE, 'yyyy-mm-dd') MDATE, GRADE" + 
-				     "  	 FROM(SELECT ID, NAME, MDATE, GRADE FROM MYCGV_MEMBER" + 
-					 "  	 	  ORDER BY BDATE DESC))"+
-					 "	WHERE RNO BETWEEN ? AND ?";
-		getPreparedStatement(sql);
+		Map<String , Integer > param = new HashMap<String , Integer>();
+		param.put("start", startCount);
+		param.put("end", endCount);
 		
-		try {
-			pstmt.setInt(1, startCount);
-			pstmt.setInt(2, endCount);
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				MemberVo memberVo = new MemberVo();
-				memberVo.setRno(rs.getInt(1));
-				memberVo.setId(rs.getString(2));
-				memberVo.setName(rs.getString(3));
-				memberVo.setMdate(rs.getString(4));
-				memberVo.setGrade(rs.getString(5));
-				
-				list.add(memberVo);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
+		List<MemberVo> list =  sqlSession.selectList("mapper.member.list",param );
+		
+		return (ArrayList<MemberVo>)list;
+		
+//		ArrayList<MemberVo> list = new ArrayList<MemberVo>();
+//		String sql = "SELECT RNO, ID, NAME, MDATE, GRADE" +
+//					 "	FROM(SELECT ROWNUM RNO, ID, NAME, to_char(MDATE, 'yyyy-mm-dd') MDATE, GRADE" + 
+//				     "  	 FROM(SELECT ID, NAME, MDATE, GRADE FROM MYCGV_MEMBER" + 
+//					 "  	 	  ORDER BY MDATE DESC))"+
+//					 "	WHERE RNO BETWEEN ? AND ?";
+//		getPreparedStatement(sql);
+//		
+//		try {
+//			pstmt.setInt(1, startCount);
+//			pstmt.setInt(2, endCount);
+//			
+//			rs = pstmt.executeQuery();
+//			
+//			while(rs.next()) {
+//				MemberVo memberVo = new MemberVo();
+//				memberVo.setRno(rs.getInt(1));
+//				memberVo.setId(rs.getString(2));
+//				memberVo.setName(rs.getString(3));
+//				memberVo.setMdate(rs.getString(4));
+//				memberVo.setGrade(rs.getString(5));
+//				
+//				list.add(memberVo);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return list;
 	}
 	
 	/**

@@ -21,7 +21,6 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Override
 	public ArrayList<MemberVo> getList(int startCount, int endCount){
-		MemberDao memberDao = new MemberDao();
 		return memberDao.select(startCount, endCount);
 	}
 	
