@@ -2,12 +2,15 @@ package com.mycgv_jsp.service;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.mycgv_jsp.dao.NoticeDao;
 import com.mycgv_jsp.vo.NoticeVo;
 
 public class NoticeServiceImpl implements NoticeService{
-	private NoticeDao noticeDao = new NoticeDao();
 	
+	@Autowired 
+	private NoticeDao noticeDao;
 	
 	public int getInsert(NoticeVo noticeVo) {
 		return noticeDao.insert(noticeVo);

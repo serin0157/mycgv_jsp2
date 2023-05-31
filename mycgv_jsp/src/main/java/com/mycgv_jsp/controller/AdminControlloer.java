@@ -126,7 +126,7 @@ public class AdminControlloer {
 	@RequestMapping(value = "/admin_notice_update.do", method = RequestMethod.GET)
 	public ModelAndView admin_notice_update(String nid) {
 		ModelAndView model = new ModelAndView();
-		NoticeVo noticevo = noticeService.getSelect(nid) ;
+		NoticeVo noticeVo = noticeService.getSelect(nid) ;
 		
 		model.addObject("nid", nid);
 		model.setViewName("admin/notice/admin_notice_update");
